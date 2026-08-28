@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LASA | Philippine Culinary Archive</title>
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --accent-gold: #ffb703;
+      --accent-gold-hover: #e0a100;
+      --bg-dark: #0b0d0f;
+      --panel-bg: #14171c;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 183, 3, 0.5);
+      --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --transition-smooth: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #e2e8f0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    h1, h2, h3, h4, h5, .font-syne {
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* STICKY TOP NAVIGATION BAR WITH SEARCH & CATEGORY DROPDOWN */
+    .sticky-top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 1040;
+      background: rgba(11, 13, 15, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-toggle-btn {
+      background: rgba(20, 23, 28, 0.9);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .nav-toggle-btn:hover {
+      background: var(--accent-gold);
+      color: #000;
+      transform: scale(1.1) rotate(90deg);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 16px rgba(255, 183, 3, 0.4);
+    }
+
+    .sticky-nav-link {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: var(--transition-smooth);
+    }
+
+    .sticky-nav-link:hover, .sticky-nav-link.active {
+      color: #fff;
+      background: rgba(255, 183, 3, 0.15);
+      border: 1px solid rgba(255, 183, 3, 0.3);
+    }
+
+    /* Search Bar in Header */
+    .nav-search-input {
+      background-color: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      border-radius: 20px;
+      padding-left: 2.2rem;
+      font-size: 0.85rem;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-search-input:focus {
+      background-color: #1a1e24;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px rgba(255, 183, 3, 0.25);
+      color: #fff;
+    }
+
+    .search-icon-wrapper {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    /* SECTION TRANSITIONS & ANIMATIONS */
+    section {
+      scroll-margin-top: 6rem;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+      will-change: transform, opacity;
+    }
+
+    .section-active-target {
+      animation: sectionHighlight 0.85s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes sectionHighlight {
+      0% {
+        opacity: 0.3;
+        transform: scale(0.93) translateY(24px);
+        filter: blur(5px);
+      }
+      50% {
+        transform: scale(1.015) translateY(-6px);
+        box-shadow: 0 0 35px rgba(255, 183, 3, 0.3);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    /* Sidebar Drawer Navigation Items */
+    .drawer-nav-link {
+      color: #94a3b8;
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid transparent;
+    }
+
+    .drawer-nav-link:hover, .drawer-nav-link:focus {
+      color: #fff !important;
+      background: rgba(255, 183, 3, 0.12) !important;
+      border-color: rgba(255, 183, 3, 0.3);
+      transform: translateX(8px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .drawer-nav-link i {
+      transition: var(--transition-smooth);
+    }
+
+    .drawer-nav-link:hover i {
+      transform: scale(1.25);
+      color: var(--accent-gold) !important;
+    }
+
+    /* Partner Card */
+    .partner-card {
+      background: linear-gradient(135deg, rgba(255, 183, 3, 0.08) 0%, rgba(20, 23, 28, 0.9) 100%);
+      border: 1px solid rgba(255, 183, 3, 0.2);
+      border-radius: 16px;
+      padding: 1.25rem;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .partner-card:hover {
+      border-color: var(--accent-gold);
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(255, 183, 3, 0.2);
+    }
+
+    /* Category Pill Badges */
+    .filter-btn {
+      border: 1px solid var(--border-subtle);
+      background: var(--panel-bg);
+      color: #94a3b8;
+      padding: 8px 22px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+
+    .filter-btn:hover {
+      color: #fff;
+      border-color: var(--accent-gold);
+      background: rgba(255, 183, 3, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(255, 183, 3, 0.2);
+    }
+
+    .filter-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+      border-color: var(--accent-gold);
+      box-shadow: 0 6px 20px rgba(255, 183, 3, 0.35);
+    }
+
+    /* Bento Cards */
+    .bento-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+      min-height: 270px;
+      transition: transform 0.4s var(--ease-out-back), border-color 0.35s ease, box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: var(--border-hover);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 183, 3, 0.2);
+    }
+
+    .bento-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      opacity: 0.75;
+      transition: opacity 0.5s ease, transform 0.6s ease;
+    }
+
+    .bento-card:hover img {
+      opacity: 0.95;
+      transform: scale(1.1);
+    }
+
+    .bento-overlay {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      background: linear-gradient(0deg, rgba(11, 13, 15, 0.95) 0%, rgba(11, 13, 15, 0.3) 65%, transparent 100%);
+      transition: var(--transition-smooth);
+    }
+
+    /* Gallery & Trivia Grid Card */
+    .trivia-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+      height: 220px;
+    }
+
+    .trivia-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .trivia-card:hover img {
+      transform: scale(1.12);
+    }
+
+    .trivia-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(11, 13, 15, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      z-index: 3;
+    }
+
+    .trivia-card-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(11, 13, 15, 0.95) 10%, rgba(11, 13, 15, 0.4) 60%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.25rem;
+      z-index: 2;
+      transition: var(--transition-smooth);
+    }
+
+    .trivia-card:hover .trivia-card-content {
+      background: linear-gradient(0deg, rgba(11, 13, 15, 0.98) 40%, rgba(11, 13, 15, 0.7) 100%);
+    }
+
+    /* Animated Filtering Styles */
+    .gallery-item {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .gallery-item.d-none {
+      display: none !important;
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    /* Fullscreen Modal Styling */
+    .fullscreen-modal-content {
+      background: #08090b;
+      border: none;
+      height: 100vh;
+    }
+
+    .modal-img-container {
+      height: 100%;
+      min-height: 350px;
+    }
+
+    .modal-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .close-fullscreen-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      z-index: 1055;
+      background: rgba(20, 23, 28, 0.8);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .close-fullscreen-btn:hover {
+      background: var(--accent-gold);
+      color: #000;
+      transform: scale(1.1) rotate(90deg);
+    }
+
+    footer {
+      background-color: #07080a;
+      border-top: 1px solid var(--border-subtle);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY TOP NAVBAR (UPDATED WITH QUICK SEARCH & DROPDOWN CATEGORIES) -->
+  <nav class="sticky-top-nav py-2 px-3 px-md-4">
+    <div class="container-xl d-flex align-items-center justify-content-between gap-3">
+      
+      <!-- LOGO & SIDEBAR TOGGLE -->
+      <div class="d-flex align-items-center gap-3">
+        <button class="nav-toggle-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#navDrawer" aria-controls="navDrawer" aria-label="Toggle Navigation Menu">
+          <i class="bi bi-list fs-5"></i>
+        </button>
+        <a href="#" class="font-syne fs-4 fw-bold text-white text-decoration-none">
+          LASA<span class="text-warning">.</span>ph
+        </a>
+      </div>
+
+      <!-- SEARCH BAR & CATEGORY QUICK DROPDOWN -->
+      <div class="d-flex align-items-center gap-2 flex-grow-1 justify-content-center" style="max-width: 480px;">
+        <!-- Live Dish Search Input -->
+        <div class="position-relative w-100">
+          <i class="bi bi-search search-icon-wrapper"></i>
+          <input type="text" id="navSearchInput" class="form-control nav-search-input" placeholder="Search dish or ingredient..." onkeyup="handleNavSearch(this.value)">
+        </div>
+
+        <!-- Quick Categories Dropdown -->
+        <div class="dropdown d-none d-sm-block">
+          <button class="btn btn-outline-secondary btn-sm dropdown-toggle rounded-pill text-white border-secondary-subtle px-3" type="button" id="navCategoryDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="background: var(--panel-bg); font-size: 0.82rem; height: 38px;">
+            <i class="bi bi-funnel-fill text-warning me-1"></i> Dishes
+          </button>
+          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow border-secondary-subtle rounded-3" aria-labelledby="navCategoryDropdown">
+            <li><a class="dropdown-item active" href="#grid-matrix" onclick="triggerDropdownFilter('all', this, 'All Dishes')"><i class="bi bi-grid-fill me-2 text-warning"></i>All Items (15)</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#grid-matrix" onclick="triggerDropdownFilter('ulam', this, 'Ulam')"><i class="bi bi-egg-fried me-2 text-warning"></i>Ulam (Main Dishes)</a></li>
+            <li><a class="dropdown-item" href="#grid-matrix" onclick="triggerDropdownFilter('dessert', this, 'Desserts')"><i class="bi bi-pie-chart-fill me-2 text-warning"></i>Desserts & Sweets</a></li>
+            <li><a class="dropdown-item" href="#grid-matrix" onclick="triggerDropdownFilter('snack', this, 'Snacks')"><i class="bi bi-cup-hot-fill me-2 text-warning"></i>Snacks / Meryenda</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DESKTOP SECTION LINKS (UPDATED: "Matrix" replaced with "Dishes") -->
+      <div class="d-none d-lg-flex align-items-center gap-2">
+        <a class="sticky-nav-link" href="#grid-matrix" onclick="navigateToSection(event, 'grid-matrix')">Dishes</a>
+        <a class="sticky-nav-link" href="#trivia-gallery" onclick="navigateToSection(event, 'trivia-gallery')">Trivia</a>
+        <a class="sticky-nav-link" href="#food-pillars" onclick="navigateToSection(event, 'food-pillars')">Flavors</a>
+        <a class="sticky-nav-link" href="#feedback" onclick="navigateToSection(event, 'feedback')">Feedback</a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- OFFCANVAS SIDEBAR MENU (UPDATED: "Culinary Matrix" replaced with "Culinary Dishes") -->
+  <div class="offcanvas offcanvas-start bg-dark text-white border-end border-secondary-subtle" tabindex="-1" id="navDrawer" aria-labelledby="navDrawerLabel" style="width: 320px;">
+    <div class="offcanvas-header p-4 border-bottom border-secondary-subtle">
+      <h5 class="offcanvas-title fs-3 font-syne fw-bold text-white" id="navDrawerLabel">
+        LASA<span class="text-warning">.</span>ph
+      </h5>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body p-4 d-flex flex-column justify-content-between">
+      <nav class="nav flex-column gap-2">
+        <a class="nav-link drawer-nav-link text-white fw-semibold rounded-3 bg-body-tertiary px-3 py-2.5" href="#grid-matrix" onclick="navigateToSection(event, 'grid-matrix')">
+          <i class="bi bi-grid-fill me-2 text-warning"></i> Culinary Dishes
+        </a>
+        <a class="nav-link drawer-nav-link text-secondary rounded-3 px-3 py-2.5" href="#trivia-gallery" onclick="navigateToSection(event, 'trivia-gallery')">
+          <i class="bi bi-lightbulb-fill me-2 text-warning"></i> Photo Gallery & Trivia
+        </a>
+        <a class="nav-link drawer-nav-link text-secondary rounded-3 px-3 py-2.5" href="#food-pillars" onclick="navigateToSection(event, 'food-pillars')">
+          <i class="bi bi-fire me-2 text-warning"></i> Flavor Profiles
+        </a>
+        <a class="nav-link drawer-nav-link text-secondary rounded-3 px-3 py-2.5" href="#feedback" onclick="navigateToSection(event, 'feedback')">
+          <i class="bi bi-pencil-square me-2 text-warning"></i> Fast Submit Form
+        </a>
+      </nav>
+
+      <!-- INTERACTIVE SPOTLIGHT CARD -->
+      <div class="partner-card mt-4" data-bs-toggle="modal" data-bs-target="#institutionModal" onclick="closeSidebar()">
+        <div class="d-flex align-items-center justify-content-between mb-1">
+          <span class="badge bg-warning text-dark font-monospace" style="font-size: 0.65rem;">CULTURE PARTNER</span>
+          <i class="bi bi-arrow-up-right-circle partner-icon text-warning fs-5"></i>
+        </div>
+        <h6 class="text-white fw-bold m-0">Pamantasan ng Cabuyao</h6>
+        <p class="text-secondary small m-0" style="font-size: 0.75rem;">College of Computing Studies</p>
+        <small class="text-warning mt-2 d-block" style="font-size: 0.75rem;"><i class="bi bi-geo-alt-fill me-1"></i>Explore Campus Food Traditions &rarr;</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container-xl py-4 px-3 px-md-5">
+
+    <!-- HEADER / CONTROLS -->
+    <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom border-secondary-subtle">
+      <div>
+        <h1 class="display-6 font-syne fw-bold text-white mb-1">Philippine Food Heritage</h1>
+        <p class="text-secondary small m-0">An interactive culinary archive showcasing iconic local dishes and regional traditions.</p>
+      </div>
+
+      <!-- CATEGORY FILTER BUTTONS -->
+      <div class="d-flex flex-wrap gap-2">
+        <button class="filter-btn active" data-filter="all" onclick="filterCategory('all', this)">All Items (15)</button>
+        <button class="filter-btn" data-filter="ulam" onclick="filterCategory('ulam', this)">Ulam (5)</button>
+        <button class="filter-btn" data-filter="dessert" onclick="filterCategory('dessert', this)">Desserts (5)</button>
+        <button class="filter-btn" data-filter="snack" onclick="filterCategory('snack', this)">Snacks (5)</button>
+      </div>
+    </header>
+
+   <!-- CAROUSEL BANNER (2000ms AUTOMATIC SLIDE) -->
+<section class="mb-5" id="hero-carousel-section">
+  <div id="culinaryCarousel" class="carousel slide rounded-4 overflow-hidden border border-secondary-subtle" data-bs-ride="carousel" data-bs-interval="2000">
+    <div class="carousel-inner">
+      
+      <!-- Slide 1: Adobo -->
+<div class="carousel-item active" data-bs-interval="2000">
+  <div class="p-4 p-md-5 bg-dark d-flex align-items-center" style="min-height: 250px; background: linear-gradient(90deg, rgba(11,13,15,1) 30%, rgba(11,13,15,0.4) 100%), url(adobo.jpg) center/cover;">
+    <div style="max-width: 520px;">
+      <span class="badge bg-warning text-dark mb-2">National Dish</span>
+      <h2 class="font-syne text-white fw-bold mb-2">Philippine Pork &amp; Chicken Adobo</h2>
+      <p class="text-secondary small mb-0">Braised in soy sauce, vinegar, garlic, and bay leaves for rich, savory flavors.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 2: Halo-Halo -->
+<div class="carousel-item" data-bs-interval="2000">
+  <div class="p-4 p-md-5 bg-dark d-flex align-items-center" style="min-height: 250px; background: linear-gradient(90deg, rgba(11,13,15,1) 30%, rgba(11,13,15,0.4) 100%), url(halohalo.jpg) center/cover;">
+    <div style="max-width: 520px;">
+      <span class="badge bg-warning text-dark mb-2">Sweet Refreshment</span>
+      <h2 class="font-syne text-white fw-bold mb-2">Halo-Halo Special</h2>
+      <p class="text-secondary small mb-0">Layered shaved ice with sweetened beans, coconut gel, leche flan, and ube halaya.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 3: Lechon -->
+<div class="carousel-item" data-bs-interval="2000">
+  <div class="p-4 p-md-5 bg-dark d-flex align-items-center" style="min-height: 250px; background: linear-gradient(90deg, rgba(11,13,15,1) 30%, rgba(11,13,15,0.4) 100%), url(lechon.jpg) center/cover;">
+    <div style="max-width: 520px;">
+      <span class="badge bg-warning text-dark mb-2">Celebration Centerpiece</span>
+      <h2 class="font-syne text-white fw-bold mb-2">Crispy Whole Lechon</h2>
+      <p class="text-secondary small mb-0">Slow-roasted over charcoal embers infused with lemongrass and aromatic herbs.</p>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+</section>
+
+    <!-- BENTO GRID MATRIX -->
+    <section class="mb-5" id="grid-matrix">
+      <div class="row g-3" id="galleryContainer">
+
+        <!-- ================= ULAM DISHES (5) ================= -->
+        <!-- Ulam 1 -->
+        <div class="col-12 col-lg-8 gallery-item" data-category="ulam" data-title="pork chicken adobo" data-tags="adobo pork chicken vinegar soy sauce garlic">
+          <div class="bento-card" onclick="openFullscreenModal('Classic Pork & Chicken Adobo', 'Ulam / Main Dish', 'adobo.jpg', 'Adobo is widely considered the unofficial national dish of the Philippines. Originating from pre-colonial preservation methods, meat is simmered in vinegar, soy sauce, garlic, black peppercorns, and bay leaves.', ['Pork Belly or Chicken', 'Cane Vinegar', 'Soy Sauce', 'Garlic & Bay Leaves'])">
+            <img src="adobo.jpg" alt="Adobo">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Ulam 1/5</span>
+              <h3 class="font-syne text-white h4 mb-1">Pork & Chicken Adobo</h3>
+              <p class="text-secondary small mb-0">National simmered meat dish</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ulam 2 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="ulam" data-title="crispy lechon belly" data-tags="lechon pork roast lemongrass crispy">
+          <div class="bento-card" onclick="openFullscreenModal('Crispy Lechon Belly', 'Ulam / Main Dish', 'lechon.jpg', 'Lechon is a roasted pork delicacy stuffed with lemongrass, garlic, and onions, roasted over embers until skin turns crisp and golden.', ['Pork Belly', 'Lemongrass', 'Garlic & Scallions', 'Liver Sauce Dip'])">
+            <img src="lechon.jpg" alt="Lechon">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Ulam 2/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Crispy Lechon</h5>
+              <p class="text-secondary small mb-0">Slow-roasted roasted delicacy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ulam 3 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="ulam" data-title="kare-kare stew" data-tags="kare kare peanut stew oxtail tripe bagoong">
+          <div class="bento-card" onclick="openFullscreenModal('Kare-Kare Stew', 'Ulam / Main Dish', 'kare kare.jpg', 'A rich savory Filipino stew made with oxtail, tripe, and vegetables in a thick roasted peanut sauce, served alongside salty bagoong (shrimp paste).', ['Oxtail & Beef Tripe', 'Ground Peanuts & Annatto', 'Eggplant & String Beans', 'Bagoong Alamang'])">
+            <img src="kare kare.jpg" alt="Kare-Kare">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Ulam 3/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Rich Kare-Kare</h5>
+              <p class="text-secondary small mb-0">Peanut stew with bagoong</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ulam 4 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="ulam" data-title="sinigang na baboy" data-tags="sinigang pork sour tamarind soup broth">
+          <div class="bento-card" onclick="openFullscreenModal('Sinigang na Baboy', 'Ulam / Main Dish', 'sinigang.jpg', 'Sinigang is a comforting sour broth flavored with ripe tamarind, pork ribs, water spinach, radish, and taro root.', ['Pork Ribs', 'Tamarind Base', 'Water Spinach', 'Taro Root'])">
+            <img src="sinigang.jpg" alt="Sinigang">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Ulam 4/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Sinigang na Baboy</h5>
+              <p class="text-secondary small mb-0">Tamarind-sour broth</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ulam 5 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="ulam" data-title="beef caldereta" data-tags="caldereta beef tomato stew liver spread bell pepper">
+          <div class="bento-card" onclick="openFullscreenModal('Rich Beef Caldereta', 'Ulam / Main Dish', 'caldereta.jpg', 'Hearty Spanish-influenced beef stew simmered with tomato sauce, liver spread, bell peppers, potatoes, and melted cheese.', ['Beef Chunks', 'Liver Paste', 'Tomato Sauce', 'Bell Peppers & Cheese'])">
+            <img src="caldereta.jpg" alt="Beef Caldereta">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Ulam 5/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Beef Caldereta</h5>
+              <p class="text-secondary small mb-0">Rich tomato & liver stew</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= DESSERTS (5) ================= -->
+        <!-- Dessert 1 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="dessert" data-title="halo halo supreme" data-tags="halo halo shaved ice ube leche flan dessert sweet">
+          <div class="bento-card" onclick="openFullscreenModal('Halo-Halo Supreme', 'Dessert', 'halohalo.jpg', 'Layered shaved ice with sweetened beans, coconut jelly, ube jam, evaporated milk, and topped with leche flan.', ['Shaved Ice & Milk', 'Ube Halaya Jam', 'Leche Flan', 'Sweetened Beans'])">
+            <img src="halohalo.jpg" alt="Halo-Halo">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Dessert 1/5</span>
+              <h4 class="font-syne text-white h5 mb-1">Halo-Halo</h4>
+              <p class="text-secondary small mb-0">Iconic Filipino cold dessert</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dessert 2 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="dessert" data-title="golden leche flan" data-tags="leche flan custard caramel egg milk sweet">
+          <div class="bento-card" onclick="openFullscreenModal('Golden Leche Flan', 'Dessert', 'leche.jpg', 'Rich caramel custard made with condensed milk and egg yolks, steamed into a creamy melt-in-your-mouth dessert.', ['Egg Yolks', 'Condensed Milk', 'Caramel Syrup'])">
+            <img src="leche.jpg" alt="Leche Flan">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Dessert 2/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Leche Flan</h5>
+              <p class="text-secondary small mb-0">Sweet caramel custard</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dessert 3 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="dessert" data-title="royal ube halaya" data-tags="ube halaya purple yam sweet jam coconut milk">
+          <div class="bento-card" onclick="openFullscreenModal('Royal Ube Halaya', 'Dessert', 'ube.jpg', 'Purple yam pudding cooked slowly with evaporated milk, coconut milk, and butter until thick and velvety.', ['Purple Yam (Ube)', 'Condensed & Coconut Milk', 'Butter'])">
+            <img src="ube.jpg" alt="Ube Halaya">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Dessert 3/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Ube Halaya</h5>
+              <p class="text-secondary small mb-0">Sweet purple yam jam</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dessert 4 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="dessert" data-title="special bibingka" data-tags="bibingka rice cake salted egg coconut claypot">
+          <div class="bento-card" onclick="openFullscreenModal('Special Claypot Bibingka', 'Dessert', 'bibingka.jpg', 'Traditional baked rice cake topped with salted duck egg slices, grated coconut, and brushed with butter.', ['Glutinous Rice Flour', 'Coconut Milk', 'Salted Egg Slices', 'Grated Coconut'])">
+            <img src="bibingka.jpg" alt="Bibingka">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Dessert 4/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Bibingka Special</h5>
+              <p class="text-secondary small mb-0">Claypot baked rice cake</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dessert 5 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="dessert" data-title="layered sapin sapin" data-tags="sapin sapin rice cake layered sticky latik coconut">
+          <div class="bento-card" onclick="openFullscreenModal('Layered Sapin-Sapin', 'Dessert', 'sapin.jpg', 'Colorful multi-layered sticky rice dish made from glutinous rice flour and coconut milk, sprinkled with toasted latik.', ['Glutinous Rice', 'Coconut Cream', 'Latik Crumbles'])">
+            <img src="sapin.jpg" alt="Sapin-Sapin">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Dessert 5/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Sapin-Sapin</h5>
+              <p class="text-secondary small mb-0">Multi-layered rice delicacy</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SNACKS / MERYENDA (5) ================= -->
+        <!-- Snack 1 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="snack" data-title="lumpia shanghai" data-tags="lumpia shanghai spring roll pork fried crispy">
+          <div class="bento-card" onclick="openFullscreenModal('Crispy Lumpia Shanghai', 'Snack / Meryenda', 'lumpia.jpg', 'Crispy spring rolls stuffed with seasoned ground pork, carrots, and onions wrapped in thin pastry and fried to golden perfection.', ['Ground Pork', 'Minced Carrots & Onions', 'Spring Roll Wrapper', 'Sweet Chili Sauce'])">
+            <img src="lumpia.jpg" alt="Lumpia">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Snack 1/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Lumpia Shanghai</h5>
+              <p class="text-secondary small mb-0">Golden spring rolls</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Snack 2 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="snack" data-title="pancit palabok" data-tags="pancit palabok noodles shrimp sauce chicharon egg">
+          <div class="bento-card" onclick="openFullscreenModal('Savory Pancit Palabok', 'Snack / Meryenda', 'palabok.jpg', 'Rice noodles coated in savory orange shrimp sauce, topped with crushed chicharon, boiled eggs, and fried garlic chips.', ['Rice Noodles', 'Rich Shrimp Sauce', 'Chicharon Crumbs', 'Boiled Eggs'])">
+            <img src="palabok.jpg" alt="Pancit Palabok">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Snack 2/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Pancit Palabok</h5>
+              <p class="text-secondary small mb-0">Shrimp sauce rice noodles</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Snack 3 -->
+        <!-- Banana Cue Item -->
+<div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="snack" data-title="banana cue" data-tags="banana cue saba brown sugar sweet meryenda street food skewer">
+  <div class="bento-card" onclick="openFullscreenModal('Caramelized Banana Cue', 'Snack / Meryenda', 'banana.jpg', 'An iconic Filipino street food snack made with sweet Saba bananas deep-fried in bubbling oil with brown sugar until coated in a sticky caramel glaze, served on bamboo skewers.', ['Saba Bananas', 'Brown Sugar', 'Cooking Oil', 'Bamboo Skewers'])">
+    <img src="banana.jpg" alt="Banana Cue">
+    <div class="bento-overlay">
+      <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Snack</span>
+      <h5 class="font-syne text-white h5 mb-0">Banana Cue</h5>
+      <p class="text-secondary small mb-0">Caramelized skewered bananas</p>
+    </div>
+  </div>
+</div>
+
+        <!-- Snack 4 -->
+        <div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="snack" data-title="banana turon" data-tags="turon banana jackfruit saba caramel sweet roll">
+          <div class="bento-card" onclick="openFullscreenModal('Sweet Banana Turon', 'Snack / Meryenda', 'turon.jpg', 'Deep-fried banana rolls made with saba bananas and ripe jackfruit wrapped in spring roll pastry and glazed with caramelized brown sugar.', ['Saba Bananas', 'Jackfruit Strips', 'Brown Sugar Caramel'])">
+            <img src="turon.jpg" alt="Turon">
+            <div class="bento-overlay">
+              <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Snack 4/5</span>
+              <h5 class="font-syne text-white h5 mb-0">Caramelized Turon</h5>
+              <p class="text-secondary small mb-0">Crispy banana jackfruit roll</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Snack 5 -->
+        <!-- Puto Item -->
+<div class="col-12 col-sm-6 col-lg-4 gallery-item" data-category="snack" data-title="puto" data-tags="puto rice cake kakanin meryenda steamed cheese dinuguan">
+  <div class="bento-card" onclick="openFullscreenModal('Traditional Steamed Puto', 'Snack / Meryenda', 'images/puto.jpg', 'A classic Filipino steamed rice cake known for its soft, fluffy texture and light sweetness, traditionally served as an afternoon meryenda or paired with savory dishes like dinuguan.', ['Rice Flour', 'Sugar', 'Coconut Milk / Milk', 'Baking Powder', 'Cheese Topping'])">
+    <img src="puto.jpg" alt="Puto">
+    <div class="bento-overlay">
+      <span class="badge bg-warning-subtle text-warning w-auto align-self-start mb-2">Snack</span>
+      <h5 class="font-syne text-white h5 mb-0">Steamed Puto</h5>
+      <p class="text-secondary small mb-0">Fluffy Filipino rice cake</p>
+    </div>
+  </div>
+</div>
+
+      </div>
+    </section>
+
+    <!-- PHOTO GALLERY WITH TRIVIA & CULINARY FACTS -->
+    <section class="mb-5" id="trivia-gallery">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div>
+          <span class="badge bg-warning text-dark mb-1">CULTURAL KNOWLEDGE</span>
+          <h3 class="font-syne text-white h3 m-0">Food Gallery & Did You Know?</h3>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        
+        <div class="col-12 col-md-4">
+          <div class="trivia-card" onclick="showTriviaModal('Sinigang World Ranking', 'Did you know? Sinigang was voted the world’s best soup on TasteAtlas in 2021. Unlike Tom Yum, Sinigang derives its signature sourness primarily from natural unripe tamarind, green mangoes, or calamansi.')">
+            <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80" alt="Sinigang Sour Soup">
+            <span class="trivia-badge"><i class="bi bi-lightbulb-fill me-1"></i>Fact #1</span>
+            <div class="trivia-card-content">
+              <h5 class="text-white font-syne h6 mb-1">Sinigang Culture</h5>
+              <p class="text-secondary small m-0">Ranked World's Best Soup &bull; Click for trivia</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <div class="trivia-card" onclick="showTriviaModal('The Secret Origin of Sisig', 'Did you know? Sizzling Sisig was originally created by Lucia Cunanan (Mama Lacing) in Angeles City, Pampanga as a creative way to recycle pig head parts from nearby US military bases.')">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80" alt="Sizzling Sisig">
+            <span class="trivia-badge"><i class="bi bi-lightbulb-fill me-1"></i>Fact #2</span>
+            <div class="trivia-card-content">
+              <h5 class="text-white font-syne h6 mb-1">Pampanga's Sisig</h5>
+              <p class="text-secondary small m-0">Origin of the Sizzling Plate &bull; Click for trivia</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <div class="trivia-card" onclick="showTriviaModal('Why Adobo Lasts Long', 'Did you know? Traditional Adobo does not spoil easily without refrigeration because vinegar and salt naturally impede bacterial growth, making it a favorite pre-colonial expedition meal.')">
+            <img src="https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&w=800&q=80" alt="Adobo Vinegar Preservation">
+            <span class="trivia-badge"><i class="bi bi-lightbulb-fill me-1"></i>Fact #3</span>
+            <div class="trivia-card-content">
+              <h5 class="text-white font-syne h6 mb-1">Preservation Science</h5>
+              <p class="text-secondary small m-0">Vinegar and natural shelf-life &bull; Click for trivia</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FLAVOR PROFILES -->
+    <section class="mb-5" id="food-pillars">
+      <div class="p-4 p-md-5 bg-body-tertiary rounded-4 border border-secondary-subtle">
+        <h3 class="font-syne text-white h3 mb-2">Filipino Flavor Profiles</h3>
+        <p class="text-secondary small mb-4">Core pillars defining regional cooking techniques across the Philippine archipelago.</p>
+
+        <div class="accordion" id="flavorAccordion">
+          
+          <div class="accordion-item bg-dark border-secondary-subtle">
+            <h2 class="accordion-header">
+              <button class="accordion-button text-white bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#flavorOne">
+                01. Sourness (Asim) Preservation
+              </button>
+            </h2>
+            <div id="flavorOne" class="accordion-collapse collapse show" data-bs-parent="#flavorAccordion">
+              <div class="accordion-body text-secondary small">
+                Tamarind (sampalok), calamansi, green mango, and coconut vinegars serve both as acidic flavor enhancers and natural preservatives tailored for tropical preservation.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item bg-dark border-secondary-subtle">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed text-white bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#flavorTwo">
+                02. Savory Umami (Lasa & Bagoong)
+              </button>
+            </h2>
+            <div id="flavorTwo" class="accordion-collapse collapse" data-bs-parent="#flavorAccordion">
+              <div class="accordion-body text-secondary small">
+                Fermented fish sauce (patis) and shrimp paste (bagoong) add deep umami notes to meat stews and vegetable dishes like Pinakbet and Kare-Kare.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item bg-dark border-secondary-subtle">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed text-white bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#flavorThree">
+                03. Rich Coconut Infusions (Gata)
+              </button>
+            </h2>
+            <div id="flavorThree" class="accordion-collapse collapse" data-bs-parent="#flavorAccordion">
+              <div class="accordion-body text-secondary small">
+                Prominent in Bicol and Southern Luzon cuisine, fresh coconut milk (gata) creates rich, velvety sauces spiced with chili peppers (siling labuyo).
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FAST SUBMIT FORM -->
+    <section class="p-4 bg-body-tertiary rounded-4 border border-secondary-subtle mb-5" id="feedback">
+      <h3 class="font-syne text-white h4 mb-3"><i class="bi bi-pencil-square text-warning me-2"></i>Submit Recipe & Feedback</h3>
+      <form onsubmit="handleFormSubmit(event)">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <input type="text" class="form-control bg-dark text-white border-secondary-subtle rounded-3" placeholder="Your Full Name" required>
+          </div>
+          <div class="col-md-6">
+            <input type="email" class="form-control bg-dark text-white border-secondary-subtle rounded-3" placeholder="Your Email Address" required>
+          </div>
+          <div class="col-12">
+            <textarea class="form-control bg-dark text-white border-secondary-subtle rounded-3" rows="3" placeholder="Share your favorite dish, local recipe, or feedback..." required></textarea>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-warning fw-bold px-4 rounded-3 text-dark">Submit Response</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-4 text-center text-secondary">
+    <div class="container">
+      <p class="mb-1 text-white fw-bold font-syne">LASA.ph</p>
+      <p class="small mb-2">Curated & Developed by <span class="text-warning fw-semibold">Athena Gwyneth Basco</span></p>
+      <small style="font-size: 0.75rem;" class="text-muted">&copy; 2026 Pamantasan ng Cabuyao &bull; College of Computing Studies</small>
+    </div>
+  </footer>
+
+  <!-- TRIVIA POPUP MODAL -->
+  <div class="modal fade" id="triviaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark border border-warning text-white">
+        <div class="modal-header border-bottom border-secondary-subtle">
+          <h5 class="modal-title font-syne text-warning" id="triviaTitle"><i class="bi bi-lightbulb-fill me-2"></i>Food Fact</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-light" id="triviaBody">Trivia detail goes here...</p>
+        </div>
+        <div class="modal-footer border-top border-secondary-subtle">
+          <button type="button" class="btn btn-warning btn-sm fw-bold text-dark" data-bs-dismiss="modal">Awesome!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTITUTION MODAL -->
+  <div class="modal fade" id="institutionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-dark border border-secondary-subtle text-white">
+        <div class="modal-header border-bottom border-secondary-subtle">
+          <h5 class="modal-title font-syne text-warning"><i class="bi bi-building me-2"></i>Pamantasan ng Cabuyao</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="small text-secondary mb-3">This project is produced under the <strong>College of Computing Studies</strong> at Pamantasan ng Cabuyao, documenting local food culture through web technology.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN PREVIEW MODAL -->
+  <div class="modal fade" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content fullscreen-modal-content text-white">
+        <button type="button" class="close-fullscreen-btn" data-bs-dismiss="modal" aria-label="Close">
+          <i class="bi bi-x-lg fs-5"></i>
+        </button>
+        <div class="modal-body p-0">
+          <div class="container-fluid h-100 p-0">
+            <div class="row g-0 h-100">
+              <div class="col-lg-6 col-xl-7 modal-img-container">
+                <img id="modalFullImg" src="" alt="Culinary Showcase">
+              </div>
+              <div class="col-lg-6 col-xl-5 p-4 p-md-5 d-flex flex-column justify-content-center bg-dark">
+                <div class="mb-3">
+                  <span class="badge bg-warning text-dark font-monospace mb-2" id="modalCategory">Category</span>
+                  <h2 class="display-5 font-syne fw-bold text-white mb-3" id="modalTitle">Dish Title</h2>
+                </div>
+                <div class="mb-4">
+                  <h5 class="text-warning font-syne h6 mb-2">History & Background</h5>
+                  <p class="text-secondary small" id="modalDescription">Detailed text description...</p>
+                </div>
+                <div class="p-3 bg-body-tertiary rounded-3 border border-secondary-subtle mb-4">
+                  <h5 class="text-white font-syne h6 mb-2"><i class="bi bi-basket-fill text-warning me-2"></i>Key Ingredients</h5>
+                  <ul class="list-unstyled text-secondary small mb-0 d-flex flex-wrap gap-2" id="modalIngredients"></ul>
+                </div>
+                <button type="button" class="btn btn-outline-light rounded-3 w-100" data-bs-dismiss="modal">Close Preview</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let currentCategoryFilter = 'all';
+
+    // NAV SEARCH HANDLER
+    function handleNavSearch(query) {
+      const searchTerm = query.toLowerCase().trim();
+      const items = document.querySelectorAll('.gallery-item');
+
+      items.forEach(item => {
+        const title = item.getAttribute('data-title') || '';
+        const tags = item.getAttribute('data-tags') || '';
+        const category = item.getAttribute('data-category');
+
+        const matchesSearch = title.includes(searchTerm) || tags.includes(searchTerm);
+        const matchesCategory = (currentCategoryFilter === 'all' || category === currentCategoryFilter);
+
+        if (matchesSearch && matchesCategory) {
+          item.classList.remove('d-none');
+        } else {
+          item.classList.add('d-none');
+        }
+      });
+    }
+
+    // TRIGGER DROPDOWN FILTER
+    function triggerDropdownFilter(category, dropdownItem, label) {
+      // Sync active item in dropdown
+      document.querySelectorAll('#navCategoryDropdown + .dropdown-menu .dropdown-item').forEach(el => el.classList.remove('active'));
+      dropdownItem.classList.add('active');
+
+      // Sync active button in header pills
+      const targetPill = document.querySelector(`.filter-btn[data-filter="${category}"]`);
+      if (targetPill) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        targetPill.classList.add('active');
+      }
+
+      currentCategoryFilter = category;
+      const searchVal = document.getElementById('navSearchInput').value;
+      handleNavSearch(searchVal);
+    }
+
+    // DYNAMIC CATEGORY FILTER HANDLER
+    function filterCategory(category, btnElement) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      btnElement.classList.add('active');
+
+      currentCategoryFilter = category;
+      const searchVal = document.getElementById('navSearchInput').value;
+      handleNavSearch(searchVal);
+    }
+
+    // SECTION NAVIGATION & ANIMATION
+    function navigateToSection(event, sectionId) {
+      event.preventDefault();
+      closeSidebar();
+
+      const targetSection = document.getElementById(sectionId);
+      if (targetSection) {
+        targetSection.classList.remove('section-active-target');
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+
+        setTimeout(() => {
+          targetSection.classList.add('section-active-target');
+        }, 150);
+      }
+    }
+
+    function closeSidebar() {
+      const sidebarEl = document.getElementById('navDrawer');
+      const sidebarInstance = bootstrap.Offcanvas.getInstance(sidebarEl);
+      if (sidebarInstance) {
+        sidebarInstance.hide();
+      }
+    }
+
+    function showTriviaModal(title, text) {
+      document.getElementById('triviaTitle').innerHTML = '<i class="bi bi-lightbulb-fill me-2"></i>' + title;
+      document.getElementById('triviaBody').innerText = text;
+      const modalEl = document.getElementById('triviaModal');
+      const modalInstance = new bootstrap.Modal(modalEl);
+      modalInstance.show();
+    }
+
+    function openFullscreenModal(title, category, img, description, ingredients) {
+      document.getElementById('modalTitle').innerText = title;
+      document.getElementById('modalCategory').innerText = category;
+      document.getElementById('modalFullImg').src = img;
+      document.getElementById('modalDescription').innerText = description;
+
+      const ingContainer = document.getElementById('modalIngredients');
+      ingContainer.innerHTML = '';
+      ingredients.forEach(ing => {
+        const li = document.createElement('li');
+        li.className = 'badge bg-dark border border-secondary-subtle text-light p-2 fw-normal';
+        li.innerText = ing;
+        ingContainer.appendChild(li);
+      });
+
+      const modalEl = document.getElementById('fullscreenModal');
+      const modalInstance = new bootstrap.Modal(modalEl);
+      modalInstance.show();
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      alert('Thank you for sharing your feedback!');
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
